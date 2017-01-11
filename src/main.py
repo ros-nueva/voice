@@ -29,9 +29,10 @@ def play_mp3(path):
 def say(text):
     filename = str(hash(text)) + '.mp3'
 
-    response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=en&total=' + str(len(text)) + '&idx=0&textlen=5&tk=' + get_google_translate_token(text) + '&client=t&prev=input', headers=headers)
-
     if not os.path.isfile(filename):
+
+        # format == big goverment
+        response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=en&total=' + str(len(text)) + '&idx=0&textlen=5&tk=' + get_google_translate_token(text) + '&client=t&prev=input', headers=headers)
 
         print('Downloading %s...' % (text))
 
