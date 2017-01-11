@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import re
 import json
 import rospy
@@ -26,17 +27,20 @@ def play_mp3(path):
     subprocess.Popen(['mpg123', '-q', path]).wait()
 
 def say(text):
+    filename = str(hash(text)) + '.mp3'
 
     response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=en&total=' + str(len(text)) + '&idx=0&textlen=5&tk=' + get_google_translate_token(text) + '&client=t&prev=input', headers=headers)
 
-    print('Downloading %s...' % (text))
+    if not os.path.isfile(filename):
 
-    with open(str(hash(text)) +'.mp3', 'wb') as fo:
+        print('Downloading %s...' % (text))
 
-        for chunk in response.iter_content(4096):
-            fo.write(chunk)
+        with open(filename, 'wb') as fo:
 
-    play_mp3(str(hash(text)) + '.mp3')
+            for chunk in response.iter_content(4096):
+                fo.write(chunk)
+
+    play_mp3(filename)
 
 def text_to_speech(goal):
     say(goal.text)
